@@ -52,4 +52,10 @@ python -m pip install -r requirements.txt
 # On Windows:
 copy .streamlit\secrets.toml.example .streamlit\secrets.toml
 # On macOS/Linux:
+
 # cp .streamlit/secrets.toml.example .streamlit/secrets.toml
+
+
+
+
+Resume Link: https://drive.google.com/file/d/1FtK7W76VybwmhcQ2PAR_4fjRuSGnVAep/view?usp=sharing
