@@ -14,8 +14,6 @@ The application follows a classic RAG pipeline:
 4.  **Reranking:** The retrieved chunks are re-scored for relevance by **Cohere's Rerank** model to improve the quality of the context.
 5.  **Generation:** The top-ranked chunks and the user's original question are sent to a **Groq** LLM, which generates a final answer grounded in the provided sources.
 
-
-
 ---
 
 ## ⚙️ Tech Stack & Providers
@@ -52,10 +50,46 @@ python -m pip install -r requirements.txt
 # On Windows:
 copy .streamlit\secrets.toml.example .streamlit\secrets.toml
 # On macOS/Linux:
-
 # cp .streamlit/secrets.toml.example .streamlit/secrets.toml
+````
 
+-----
 
+## 🔧 Configuration Details
 
+  * **Chunking Strategy:** `RecursiveCharacterTextSplitter` with a **chunk size of 800 tokens** and a **chunk overlap of 100 tokens**.
+  * **Embedding Model:** `all-MiniLM-L6-v2` (384 dimensions).
+  * **Retriever:** Pinecone vector search configured to retrieve the **top 10** most similar documents (`k=10`).
+  * **Reranker:** Cohere's `rerank-english-v3.0` model, which filters the retrieved documents down to the **top 4** most relevant ones (`top_n=4`).
 
-Resume Link: https://drive.google.com/file/d/1FtK7W76VybwmhcQ2PAR_4fjRuSGnVAep/view?usp=sharing
+-----
+
+## ✅ Minimal Evaluation (Gold Set)
+
+A small set of questions was used to test the RAG pipeline's effectiveness.
+
+| Question | Expected Answer Snippet | Actual Result |
+| :--- | :--- | :--- |
+| What is the Transformer model? | A model architecture introduced by Google in 2017. | **Success.** Provided the correct definition with citation. |
+| Who is the leader in GPUs? | NVIDIA is the leader. | **Success.** Correctly identified NVIDIA. |
+| What is Cohere? | A Canadian startup providing LLMs for enterprise use. | **Success.** Correctly identified Cohere's purpose. |
+| What does Gemini come in? | Different sizes, such as Ultra, Pro, and Nano. | **Success.** Listed the correct sizes. |
+| What is the best recipe for pasta? | An "I cannot answer" response. | **Success.** Correctly stated the answer was not in the context. |
+
+**Success Rate:** The model achieved a **100% success rate** on this test set, correctly answering all in-domain questions with proper grounding and correctly identifying the out-of-domain question.
+
+-----
+
+## 💡 Remarks & Tradeoffs
+
+  * **Model Deprecation:** During development, we encountered multiple `model_decommissioned` errors from the Groq API. This highlights a key tradeoff in using cutting-edge AI services: developers must be prepared to update their code frequently as model availability changes. We adapted by updating the `model_name` multiple times to land on a stable, supported model.
+  * **Free Tier Limits:** This application was built using the free tiers of all cloud services. A production application would require upgrading to paid plans to handle higher usage and ensure availability.
+
+-----
+
+## 🔗 Resume Link
+
+https://drive.google.com/file/d/1FtK7W76VybwmhcQ2PAR_4fjRuSGnVAep/view?usp=sharing
+
+```
+```
